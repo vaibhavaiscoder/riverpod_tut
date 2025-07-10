@@ -30,4 +30,17 @@ class DbService {
   Future<void> deleteTask(Task task) async {
     await _ref.doc(task.id).delete();
   }
+  
+  //fetch favorite tasks
+  Stream<List<Task>> fetchFavoriteTasks() {
+    return _ref.snapshots().map(
+          (snap) => snap.docs
+          .where((doc) => (doc.data() as Map<String, dynamic>)['isFav'] == true)
+          .map(
+            (doc) => Task.fromMap(doc.id, doc.data() as Map<String, dynamic>),
+      )
+          .toList(),
+    );
+  }
+
 }

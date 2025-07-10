@@ -13,3 +13,8 @@ final taskStreamProvider = StreamProvider<List<Task>>((ref){
   final dbService = ref.watch(taskDBServiceProvider);
   return dbService.fetchAllTasks();
 });
+
+final favTaskStreamProvider = StreamProvider<List<Task>>((ref){
+  final dbService = ref.watch(taskDBServiceProvider);
+  return dbService.fetchFavoriteTasks();
+});
