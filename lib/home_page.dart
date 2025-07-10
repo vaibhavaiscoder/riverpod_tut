@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
                 IconButton(onPressed: (){
                   context.push(Routes.FAVORITES);
                 }, icon: Icon(Icons.favorite)),              IconButton(onPressed: (){
-                  context.push(Routes.VIDEOPLAYER);
+                  context.push(Routes.VIDEODETAILS);
                 }, icon: Icon(Icons.info)),
               ],),
               body: Padding(
