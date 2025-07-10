@@ -31,6 +31,50 @@ class _VideoDetailsPageState extends State<VideoDetailsPage> {
   final double _pipWidth = 150;
   final double _pipHeight = 100;
 
+
+  // Sample video data
+  List<Map<String, dynamic>> relatedVideos = [
+    {
+      'title': 'Physics Fundamentals',
+      'url': defaultVideoUrl,
+      'thumbnail': 'https://via.placeholder.com/300x200/4CAF50/FFFFFF?text=Physics',
+      'duration': '15:30',
+      'views': '2.1M',
+      'uploadTime': '3 days ago'
+    },
+    {
+      'title': 'Chemistry Basics',
+      'url': defaultVideoUrl,
+      'thumbnail': 'https://via.placeholder.com/300x200/FF5722/FFFFFF?text=Chemistry',
+      'duration': '12:45',
+      'views': '1.8M',
+      'uploadTime': '1 week ago'
+    },
+    {
+      'title': 'Mathematics Advanced',
+      'url': defaultVideoUrl,
+      'thumbnail': 'https://via.placeholder.com/300x200/2196F3/FFFFFF?text=Mathematics',
+      'duration': '20:15',
+      'views': '950K',
+      'uploadTime': '2 days ago'
+    },
+    {
+      'title': 'Biology Concepts',
+      'url': defaultVideoUrl,
+      'thumbnail': 'https://via.placeholder.com/300x200/9C27B0/FFFFFF?text=Biology',
+      'duration': '18:22',
+      'views': '1.5M',
+      'uploadTime': '5 days ago'
+    },
+    {
+      'title': 'History Lessons',
+      'url': defaultVideoUrl,
+      'thumbnail': 'https://via.placeholder.com/300x200/FF9800/FFFFFF?text=History',
+      'duration': '25:10',
+      'views': '800K',
+      'uploadTime': '1 day ago'
+    },
+  ];
   @override
   void initState() {
     super.initState();
@@ -524,6 +568,31 @@ class _VideoDetailsPageState extends State<VideoDetailsPage> {
                         _buildActionButton(Icons.download, 'Download', ''),
                       ],
                     ),
+                    const SizedBox(height: 20),
+
+                    // Related Videos Section
+                    const Text(
+                      'Related Videos',
+                      style: TextStyle(
+                        color: Color(0xFF4F4F4F),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Horizontal Video List
+                    SizedBox(
+                      height: 200,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: relatedVideos.length,
+                        itemBuilder: (context, index) {
+                          final video = relatedVideos[index];
+                          return _buildVideoThumbnail(video, index);
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -537,6 +606,175 @@ class _VideoDetailsPageState extends State<VideoDetailsPage> {
     );
   }
 
+  Widget _buildVideoThumbnail(Map<String, dynamic> video, int index) {
+    return GestureDetector(
+      onTap: () => _playVideo(video['url']),
+      child: Container(
+        width: 180,
+        margin: const EdgeInsets.only(right: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Thumbnail with duration overlay
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    width: 180,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: video['thumbnail'].startsWith('http')
+                        ? Image.network(
+                      video['thumbnail'],
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          color: Colors.grey[300],
+                          child: const Icon(
+                            Icons.video_library,
+                            size: 40,
+                            color: Colors.grey,
+                          ),
+                        );
+                      },
+                    )
+                        : Container(
+                      color: Colors.grey[300],
+                      child: const Icon(
+                        Icons.video_library,
+                        size: 40,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Play button overlay
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.black.withOpacity(0.3),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.play_circle_filled,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Duration badge
+                Positioned(
+                  bottom: 8,
+                  right: 8,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.8),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      video['duration'],
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 8),
+
+            // Video title
+            Text(
+              video['title'],
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF4F4F4F),
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+
+            const SizedBox(height: 4),
+
+            // Video info
+            Row(
+              children: [
+                Icon(
+                  Icons.visibility,
+                  size: 12,
+                  color: Colors.grey[600],
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  video['views'],
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  '•',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    video['uploadTime'],
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  void _playVideo(String videoUrl) {
+    _controller.pause();
+    _controller.dispose();
+
+    setState(() {
+      _controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
+      _initializeVideoPlayerFuture = _initializeVideoPlayer();
+      _currentSliderValue = 0.0;
+      _currentPosition = "00:00";
+      isMinimized = false;
+      showControls = true;
+    });
+
+    // Re-add listener for new controller
+    _controller.addListener(() {
+      if (mounted) {
+        setState(() {
+          _currentSliderValue = _controller.value.position.inMilliseconds.toDouble();
+          _currentPosition = _formatDuration(_controller.value.position);
+          isPlaying = _controller.value.isPlaying;
+        });
+      }
+    });
+  }
   Widget _buildActionButton(IconData icon, String label, String count) {
     return Column(
       children: [

@@ -16,10 +16,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       customPageRoute(Routes.HOME, HomePage()),
       customPageRoute(Routes.FAVORITES, FavoriteTasks()),
       customPageRoute(Routes.VIDEODETAILS, VideoDetailsPage()),
-      customPageRouteWithExtra(Routes.VIDEOPLAYER, (state) {
-        final videoUrl = state.extra as String;
-        return VideoPlayPage(videoUrl: videoUrl);
-      }),
+      // customPageRouteWithExtra(Routes.VIDEOPLAYER, (state) {
+      //   final videoUrl = state.extra as String;
+      //   return VideoPlayPage(videoUrl: videoUrl);
+      // }),
     ],
   );
 });
