@@ -10,17 +10,18 @@ class Task {
     required this.desc,
     this.isDone = false,
   });
+
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'title': title,
       'desc': desc,
       'isDone': isDone,
     };
   }
-  factory Task.fromMap(Map<String, dynamic> map) {
+
+  factory Task.fromMap(String id, Map<String, dynamic> map) {
     return Task(
-      id: map['id'] ?? '',
+      id: id,
       title: map['title'] ?? '',
       desc: map['desc'] ?? '',
       isDone: map['isDone'] ?? false,
